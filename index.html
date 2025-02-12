@@ -1,0 +1,218 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+              font-family: 'Poppins', sans-serif;
+          }
+  
+          body {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              min-height: 100vh;
+              background: linear-gradient(135deg, #ff758c, #ff7eb3);
+              overflow: hidden;
+              color: #2c3e50;
+              text-align: center;
+          }
+  
+          .container {
+              background: rgba(255, 255, 255, 0.9);
+              padding: 2rem;
+              border-radius: 20px;
+              box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+              max-width: 500px;
+              width: 100%;
+              transition: transform 0.3s ease-in-out;
+          }
+  
+          .container:hover {
+              transform: scale(1.03);
+          }
+  
+          h1 {
+              color: #d63031;
+              font-size: 2rem;
+          }
+  
+          input {
+              padding: 10px;
+              width: 80%;
+              font-size: 1em;
+              border: 2px solid #e84393;
+              border-radius: 25px;
+              text-align: center;
+              outline: none;
+              transition: 0.3s;
+          }
+  
+          input:focus {
+              border-color: #ff6b81;
+              box-shadow: 0 0 10px rgba(255, 107, 129, 0.5);
+          }
+  
+          button {
+              padding: 12px 30px;
+              font-size: 1.1em;
+              border: none;
+              border-radius: 25px;
+              cursor: pointer;
+              font-weight: bold;
+              transition: 0.3s;
+              margin: 10px;
+          }
+  
+          .btn-utama {
+              background: #e84393;
+              color: white;
+          }
+  
+          .btn-utama:hover {
+              background: #ff6b81;
+          }
+  
+          .btn-batal {
+              background: #ecf0f1;
+              color: #2c3e50;
+              position: absolute;
+          }
+  
+          .pilihan-container, .coklat-container {
+              display: none;
+              justify-content: center;
+              gap: 1.5rem;
+              margin-top: 2rem;
+              flex-wrap: wrap;
+          }
+  
+          .pilihan {
+              font-size: 1.4em;
+              font-weight: bold;
+              background: #ff6b81;
+              color: white;
+              padding: 15px;
+              border-radius: 50%;
+              cursor: pointer;
+              transition: transform 0.2s ease-in-out;
+          }
+  
+          .pilihan:hover {
+              transform: scale(1.1);
+          }
+  
+          .coklat {
+              width: 140px;
+              transition: clip-path 0.3s ease-in-out;
+              cursor: pointer;
+          }
+  
+          #tombolBatal {
+              transition: transform 0.2s ease-out;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+          <div id="formNama">
+              <h1>Siapa Namamu?</h1>
+              <input type="text" id="inputNama" placeholder="Masukkan nama">
+              <br>
+              <button class="btn-utama" onclick="tampilkanPertanyaan()">Lanjut →</button>
+          </div>
+          
+          <div id="pertanyaanUtama" style="display: none;">
+              <h1 id="teksPertanyaan"></h1>
+              <button class="btn-utama" onclick="tampilkanPilihan()">Iya, Mau! 🎁</button>
+              <button class="btn-batal" id="tombolBatal" onmouseover="gerakkanTombol()">Nanti Aja 😅</button>
+          </div>
+  
+          <div class="pilihan-container" id="pilihanContainer">
+              <div class="pilihan" onclick="tampilkanCoklat(1)">🍫 1</div>
+              <div class="pilihan" onclick="tampilkanCoklat(2)">🍫 2</div>
+              <div class="pilihan" onclick="tampilkanCoklat(3)">🍫 3</div>
+          </div>
+  
+          <div class="coklat-container" id="coklatContainer"></div>
+      </div>
+  
+      <script>
+          function tampilkanPertanyaan() {
+              const nama = document.getElementById('inputNama').value || 'Teman';
+              document.getElementById('formNama').style.display = 'none';
+              document.getElementById('pertanyaanUtama').style.display = 'block';
+              document.getElementById('teksPertanyaan').textContent = `${nama}, mau kejutan manis untuk Valentine?`;
+          }
+  
+          function tampilkanPilihan() {
+              document.getElementById('pertanyaanUtama').style.display = 'none';
+              document.getElementById('pilihanContainer').style.display = 'flex';
+              new Audio("blue.mp3").play();
+          }
+  
+          function gerakkanTombol() {
+              const btn = document.getElementById('tombolBatal');
+              const offsetX = (Math.random() - 0.5) * 400;
+              const offsetY = (Math.random() - 0.5) * 400;
+              btn.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+          }
+  
+          function tampilkanCoklat(pilihan) {
+              const coklatContainer = document.getElementById('coklatContainer');
+              coklatContainer.innerHTML = '';
+  
+              let coklatSrc = "";
+              if (pilihan === 1) {
+                  coklatSrc = "coklat1.png";
+              } else if (pilihan === 2) {
+                  coklatSrc = "coklat2.png";
+              } else if (pilihan === 3) {
+                  coklatSrc = "coklat3.png";
+              }
+  
+              const coklatImg = document.createElement('img');
+              coklatImg.src = coklatSrc;
+              coklatImg.className = 'coklat';
+              coklatImg.onclick = makanCoklat;
+              coklatImg.dataset.biteIndex = "0";
+              
+              coklatContainer.appendChild(coklatImg);
+              coklatContainer.style.display = 'flex';
+          }
+  
+          let gigitan = [
+              "polygon(0% 0%, 100% 0%, 100% 100%, 85% 95%, 70% 85%, 50% 90%, 30% 95%, 0% 100%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 90% 85%, 75% 75%, 60% 80%, 40% 90%, 10% 100%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 95% 75%, 80% 65%, 65% 70%, 50% 85%, 20% 100%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 98% 65%, 85% 55%, 70% 60%, 55% 75%, 30% 95%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 99% 55%, 90% 45%, 75% 50%, 60% 70%, 40% 90%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 100% 45%, 92% 35%, 80% 40%, 65% 60%, 50% 80%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 100% 35%, 95% 25%, 85% 30%, 70% 50%, 60% 70%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 100% 25%, 97% 15%, 90% 20%, 75% 40%, 65% 60%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 100% 15%, 98% 5%, 92% 10%, 80% 30%, 70% 50%)",
+              "polygon(0% 0%, 100% 0%, 100% 100%, 100% 5%, 99% 0%, 95% 3%, 85% 25%, 75% 45%)",
+              "polygon(10% 10%, 10% 10%, 10% 10%, 10% 10%, 10% 10%, 10% 10%, 10% 10, 10% 10%)"
+          ];
+  
+          function makanCoklat(event) {
+              let coklat = event.target;
+              let index = parseInt(coklat.dataset.biteIndex);
+              if (index < gigitan.length) {
+                  coklat.style.clipPath = gigitan[index];
+                  coklat.dataset.biteIndex = index + 1;
+                  new Audio("bite.mp3").play();
+              } else {
+                  coklat.remove();
+                  alert("Yahh coklatnya habis...")
+              }
+          }
+      </script>
+  </body>
+  </html>
+  
